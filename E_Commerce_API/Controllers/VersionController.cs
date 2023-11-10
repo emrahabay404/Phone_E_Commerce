@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce_API.Controllers
 {
-   [Authorize]
+   //[Authorize]
    [Route("api/[controller]")]
    [ApiController]
    public class VersionController : ControllerBase

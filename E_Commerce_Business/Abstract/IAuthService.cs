@@ -12,7 +12,5 @@ namespace E_Commerce_Business.Abstract
       IResult UserExists(string email);
       IDataResult<AccessToken> CreateAccessToken(User user);
 
-   
-
    }
 }

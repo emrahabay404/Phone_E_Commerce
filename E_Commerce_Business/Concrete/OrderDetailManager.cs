@@ -3,6 +3,7 @@ using E_Commerce_Business.Abstract;
 using E_Commerce_Business.Constants;
 using E_Commerce_Core.Utilities.Results;
 using E_Commerce_DataAccess.Abstract;
+using E_Commerce_DataAccess.Concrete.EntityFramework;
 using E_Commerce_Entity.Concrete;
 using E_Commerce_Entity.DTOs;
 
@@ -12,8 +13,10 @@ namespace E_Commerce_Business.Concrete
    {
       IMapper _mapper;
       IOrderDetailDal _OrderDetailDal;
-      public OrderDetailManager(IOrderDetailDal orderDetailDal, IMapper mapper)
+      public ICacheService _CacheService { get; }
+      public OrderDetailManager(IOrderDetailDal orderDetailDal, IMapper mapper, ICacheService cacheService)
       {
+         _CacheService = cacheService;
          _mapper = mapper;
          _OrderDetailDal = orderDetailDal;
       }
@@ -33,9 +36,12 @@ namespace E_Commerce_Business.Concrete
 
       public async Task<IDataResult<IEnumerable<OrderDetailDto>>> GetAllAsync()
       {
-         var _orderDetail = await _OrderDetailDal.GetAllAsync();
-         var _orderDetailDto = _mapper.Map<IEnumerable<OrderDetailDto>>(_orderDetail);
-         return new SuccessDataResult<IEnumerable<OrderDetailDto>>(_orderDetailDto, Messages.OrderDetail_Listed);
+         var _entity = await _OrderDetailDal.GetAllAsync();
+         var entityDtos = _mapper.Map<IEnumerable<OrderDetailDto>>(_entity);
+         var expirationTime = DateTimeOffset.Now.AddMinutes(30);
+         _CacheService.SetData("AllOrderDetails", entityDtos, expirationTime);
+         var cachedData = _CacheService.GetData<IEnumerable<OrderDetailDto>>("AllOrderDetails");
+         return new SuccessDataResult<IEnumerable<OrderDetailDto>>(cachedData, Messages.OrderDetail_Listed);
       }
 
       public async Task<IDataResult<OrderDetailDto>> GetByIdAsync(int OrderDetailId)

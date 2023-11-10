@@ -3,8 +3,6 @@ using E_Commerce_Business.Abstract;
 using E_Commerce_Business.Constants;
 using E_Commerce_Core.Utilities.Results;
 using E_Commerce_DataAccess.Abstract;
-using E_Commerce_DataAccess.Concrete.EntityFramework;
-using E_Commerce_Entity.Concrete;
 using E_Commerce_Entity.DTOs;
 using Version = E_Commerce_Entity.Concrete.Version;
 
@@ -12,11 +10,12 @@ namespace E_Commerce_Business.Concrete
 {
    public class VersionManager : IVersionService
    {
-
+      public ICacheService _CacheService { get; }
       IMapper _mapper;
       IVersionDal _VersionDal;
-      public VersionManager(IVersionDal versionDal, IMapper mapper)
+      public VersionManager(IVersionDal versionDal, IMapper mapper, ICacheService cacheService)
       {
+         _CacheService = cacheService;
          _mapper = mapper;
          _VersionDal = versionDal;
       }
@@ -35,16 +34,22 @@ namespace E_Commerce_Business.Concrete
 
       public async Task<IDataResult<IEnumerable<VersionDto>>> GetAllAsync()
       {
-         var _Version = await _VersionDal.GetAllAsync();
-         var _VersionDto = _mapper.Map<IEnumerable<VersionDto>>(_Version);
-         return new SuccessDataResult<IEnumerable<VersionDto>>(_VersionDto, Messages.Versions_Listed);
+         var _entity = await _VersionDal.GetAllAsync();
+         var entityDtos = _mapper.Map<IEnumerable<VersionDto>>(_entity);
+         var expirationTime = DateTimeOffset.Now.AddMinutes(30);
+         _CacheService.SetData("AllVersions", entityDtos, expirationTime);
+         var cachedData = _CacheService.GetData<IEnumerable<VersionDto>>("AllVersions");
+         return new SuccessDataResult<IEnumerable<VersionDto>>(cachedData, Messages.Versions_Listed);
       }
 
       public async Task<IDataResult<VersionDto>> GetByIdAsync(int versionID)
       {
-         var _Version = await _VersionDal.GetAsync(x => x.VersionID == versionID);
-         var _VersionDto = _mapper.Map<VersionDto>(_Version);
-         return new SuccessDataResult<VersionDto>(_VersionDto, Messages.Version_Fetched);
+         var _Entity = await _VersionDal.GetAsync(Category => Category.VersionID == versionID);
+         var _EntityDto = _mapper.Map<VersionDto>(_Entity);
+         var expirationTime = DateTimeOffset.Now.AddMinutes(30);
+         _CacheService.SetData("VersionByID", _EntityDto, expirationTime);
+         var cachedData = _CacheService.GetData<VersionDto>("VersionByID");
+         return new SuccessDataResult<VersionDto>(cachedData, Messages.Version_Fetched);
       }
 
       public async Task<IResult> UpdateAsync(VersionDto versionDto)
@@ -53,5 +58,6 @@ namespace E_Commerce_Business.Concrete
          await _VersionDal.UpdateAsync(_Version);
          return new SuccessResult(Messages.Version_Updated);
       }
+
    }
 }

@@ -3,6 +3,7 @@ using E_Commerce_Business.Abstract;
 using E_Commerce_Business.Constants;
 using E_Commerce_Core.Utilities.Results;
 using E_Commerce_DataAccess.Abstract;
+using E_Commerce_DataAccess.Concrete.EntityFramework;
 using E_Commerce_Entity.Concrete;
 using E_Commerce_Entity.DTOs;
 
@@ -12,13 +13,15 @@ namespace E_Commerce_Business.Concrete
    {
       IMapper _mapper;
       IBrandDal _BrandDal;
-      public BrandManager(IBrandDal  brandDal, IMapper mapper)
+      public ICacheService _CacheService { get; }
+      public BrandManager(IBrandDal brandDal, IMapper mapper, ICacheService cacheService)
       {
+         _CacheService = cacheService;
          _mapper = mapper;
          _BrandDal = brandDal;
       }
 
-      public async Task<IResult> AddAsync(BrandDto  brandDto)
+      public async Task<IResult> AddAsync(BrandDto brandDto)
       {
          var _brand = _mapper.Map<Brand>(brandDto);
          await _BrandDal.AddAsync(_brand);
@@ -34,19 +37,25 @@ namespace E_Commerce_Business.Concrete
 
       public async Task<IDataResult<IEnumerable<BrandDto>>> GetAllAsync()
       {
-         var _Brand = await _BrandDal.GetAllAsync();
-         var _BrandDto = _mapper.Map<IEnumerable<BrandDto>>(_Brand);
-         return new SuccessDataResult<IEnumerable<BrandDto>>(_BrandDto, Messages.Brands_Listed);
+         var _entity = await _BrandDal.GetAllAsync();
+         var entityDtos = _mapper.Map<IEnumerable<BrandDto>>(_entity);
+         var expirationTime = DateTimeOffset.Now.AddMinutes(30);
+         _CacheService.SetData("AllBrands", entityDtos, expirationTime);
+         var cachedData = _CacheService.GetData<IEnumerable<BrandDto>>("AllBrands");
+         return new SuccessDataResult<IEnumerable<BrandDto>>(cachedData, Messages.Brands_Listed);
       }
 
       public async Task<IDataResult<BrandDto>> GetByIdAsync(int BrandID)
       {
-         var _Brand = await _BrandDal.GetAsync(x => x.BrandID == BrandID);
-         var _BrandDto = _mapper.Map<BrandDto>(_Brand);
-         return new SuccessDataResult<BrandDto>(_BrandDto, Messages.Brand_Fetched);
+         var _Entity = await _BrandDal.GetAsync(Brand => Brand.BrandID == BrandID);
+         var _EntityDto = _mapper.Map<BrandDto>(_Entity);
+         var expirationTime = DateTimeOffset.Now.AddMinutes(30);
+         _CacheService.SetData("BrandByID", _EntityDto, expirationTime);
+         var cachedData = _CacheService.GetData<BrandDto>("BrandByID");
+         return new SuccessDataResult<BrandDto>(cachedData, Messages.Brand_Fetched);
       }
 
-      public async Task<IResult> UpdateAsync(BrandDto   brandDto)
+      public async Task<IResult> UpdateAsync(BrandDto brandDto)
       {
          var _Brand = _mapper.Map<Brand>(brandDto);
          await _BrandDal.UpdateAsync(_Brand);

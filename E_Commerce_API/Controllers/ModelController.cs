@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce_API.Controllers
 {
-   [Authorize]
+   //[Authorize]
    [Route("api/[controller]")]
    [ApiController]
    public class ModelController : ControllerBase
@@ -27,6 +27,7 @@ namespace E_Commerce_API.Controllers
          }
          return BadRequest(result);
       }
+
       [HttpPost]
       public async Task<IActionResult> Add(ModelDto modelDto)
       {

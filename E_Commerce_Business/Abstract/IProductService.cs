@@ -6,12 +6,12 @@ namespace E_Commerce_Business.Abstract
 {
     public interface IProductService
    {
-      List<Product> AllGetList();
-      IResult Add(ProductDto ProductDto);
-      IResult Update(ProductDto ProductDto);
-      IResult Delete(ProductDto chiefDto);
-      IDataResult<ProductDto> Get(int ProductNo);
-      IDataResult<IEnumerable<ProductDto>> GetAll();
+      //List<Product> AllGetList();
+      //IResult Add(ProductDto ProductDto);
+      //IResult Update(ProductDto ProductDto);
+      //IResult Delete(ProductDto chiefDto);
+      //IDataResult<ProductDto> Get(int ProductNo);
+      //IDataResult<IEnumerable<ProductDto>> GetAll();
 
       //ASYNC'ss
       Task<IResult> AddAsync(ProductDto productDto);
@@ -19,7 +19,7 @@ namespace E_Commerce_Business.Abstract
       Task<IResult> DeleteAsync(int productId);
       Task<IDataResult<ProductDto>> GetByIdAsync(int productId);
       Task<IDataResult<IEnumerable<ProductDto>>> GetAllAsync();
-      Task DeleteAsync(int? productId);
+      //Task DeleteAsync(int? productId);
    }
 
 }

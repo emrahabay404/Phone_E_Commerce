@@ -9,9 +9,18 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+////REDÝS ConnectionMultiplexer KULLANIMI ÝÇÝN
+IConfiguration configuration = builder.Configuration;
+var multiplexer = ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis"));
+builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+////REDÝS ConnectionMultiplexer KULLANIMI ÝÇÝN
+
 
 //dapper için 
 //builder.Services.AddTransient<DapperDBContext>();
@@ -23,6 +32,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllersWithViews();
+
+
+////REDÝS KULLANIMI ÝÇÝN
+//builder.Services.AddDistributedRedisCache(options =>
+//{
+//   options.Configuration = "127.0.0.1:6379";
+//});
+//builder.Services.AddSingleton<IConnectionMultiplexer>(x => ConnectionMultiplexer.Connect(
+//   new ConfigurationOptions
+//   {
+//      EndPoints = { $"{builder.Configuration.GetValue<string>("Redis:Host")}:{builder.Configuration.GetValue<int>("Redis:Port")}" }
+//   }));
+//builder.Services.AddScoped<IRedisService, RedisService>();
+////REDÝS KULLANIMI ÝÇÝN
 
 
 builder.Services.AddSwaggerGen(options =>
@@ -39,7 +62,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
-//API de DbContext i kullanabilmek için
+//API de Standart DbContext i kullanabilmek için
 builder.Services.AddTransient<E_Commerce_DbContext>();
 
 
@@ -47,6 +70,7 @@ builder.Services.AddTransient<E_Commerce_DbContext>();
 //{
 //   option.UseSqlServer(builder.Configuration.GetConnectionString("SqlConn"));
 //});
+
 
 //HTTP CONTEXT ACCESOR ÝÇÝN
 builder.Services.AddHttpContextAccessor();
@@ -95,6 +119,13 @@ builder.Services.AddAuthorization(options =>
 
 var app = builder.Build();
 
+
+///CACHE ÝÇÝN
+//var cacheManager = app.Services.GetRequiredService<ICacheManager>();
+//cacheManager.Add("nbf", DateTimeOffset.Now.ToUnixTimeSeconds(), 600);
+///CACHE ÝÇÝN
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -119,6 +150,9 @@ app.UseCors("E_Commerce_Origins");
 //builder.Services.AddCors();
 
 
+//app.ConfigureCustomExceptionMiddleware();
+app.UseAuthentication();
+//app.UseLogoutHandler();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

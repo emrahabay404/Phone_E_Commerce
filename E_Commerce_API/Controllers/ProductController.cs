@@ -1,11 +1,10 @@
 ﻿using E_Commerce_Business.Abstract;
 using E_Commerce_Entity.DTOs;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce_API.Controllers
 {
-   [Authorize]
+   //[Authorize]
    [Route("api/[controller]")]
    [ApiController]
    public class ProductController : ControllerBase

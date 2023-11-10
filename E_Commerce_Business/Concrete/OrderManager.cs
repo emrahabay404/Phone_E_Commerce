@@ -3,8 +3,8 @@ using DataAccess.Abstract;
 using E_Commerce_Business.Abstract;
 using E_Commerce_Business.Constants;
 using E_Commerce_Core.Utilities.Results;
-using E_Commerce_Entity.Concrete;
 using E_Commerce_Entity.DTOs;
+using Order = E_Commerce_Entity.Concrete.Order;
 
 namespace E_Commerce_Business.Concrete
 {
@@ -12,8 +12,10 @@ namespace E_Commerce_Business.Concrete
    {
       IMapper _mapper;
       IOrderDal _OrderDal;
-      public OrderManager(IOrderDal orderDal, IMapper mapper)
+      public ICacheService _CacheService { get; }
+      public OrderManager(IOrderDal orderDal, IMapper mapper, ICacheService cacheService)
       {
+         _CacheService = cacheService;
          _mapper = mapper;
          _OrderDal = orderDal;
       }
@@ -33,23 +35,32 @@ namespace E_Commerce_Business.Concrete
 
       public async Task<IDataResult<IEnumerable<OrderDto>>> GetAllAsync()
       {
-         var _ORDER = await _OrderDal.GetAllAsync();
-         var _ORDERDto = _mapper.Map<IEnumerable<OrderDto>>(_ORDER);
-         return new SuccessDataResult<IEnumerable<OrderDto>>(_ORDERDto, Messages.Orders_Listed);
+         var _entity = await _OrderDal.GetAllAsync();
+         var entityDtos = _mapper.Map<IEnumerable<OrderDto>>(_entity);
+         var expirationTime = DateTimeOffset.Now.AddMinutes(30);
+         _CacheService.SetData("AllOrders", entityDtos, expirationTime);
+         var cachedData = _CacheService.GetData<IEnumerable<OrderDto>>("AllOrders");
+         return new SuccessDataResult<IEnumerable<OrderDto>>(cachedData, Messages.Orders_Listed);
       }
 
       public async Task<IDataResult<IEnumerable<OrderDto>>> GetByCustomerID(int customerID)
       {
-         var _order = await _OrderDal.GetAllAsync(x => x.CustomerID == customerID);
-         var _orderDto = _mapper.Map<IEnumerable<OrderDto>>(_order);
-         return new SuccessDataResult<IEnumerable<OrderDto>>(_orderDto, Messages.Orders_Listed);
+         var _Entity = await _OrderDal.GetAllAsync(Order => Order.CustomerID == customerID);
+         var _EntityDto = _mapper.Map<IEnumerable<OrderDto>>(_Entity);
+         var expirationTime = DateTimeOffset.Now.AddMinutes(30);
+         _CacheService.SetData("OrderByCustomerID", _EntityDto, expirationTime);
+         var cachedData = _CacheService.GetData<IEnumerable<OrderDto>>("OrderByCustomerID");
+         return new SuccessDataResult<IEnumerable<OrderDto>>(cachedData, Messages.Order_Fetched);
       }
 
-      public async Task<IDataResult<OrderDto>> GetByIdAsync(int orderID)
+      public async Task<IDataResult<OrderDto>> GetByIdAsync(int _OrderID)
       {
-         var _order = await _OrderDal.GetAsync(x => x.OrderID == orderID);
-         var _orderDto = _mapper.Map<OrderDto>(_order);
-         return new SuccessDataResult<OrderDto>(_orderDto, Messages.Order_Fetched);
+         var _Entity = await _OrderDal.GetAsync(Order => Order.OrderID == _OrderID);
+         var _EntityDto = _mapper.Map<OrderDto>(_Entity);
+         var expirationTime = DateTimeOffset.Now.AddMinutes(30);
+         _CacheService.SetData("OrderByID", _EntityDto, expirationTime);
+         var cachedData = _CacheService.GetData<OrderDto>("OrderByID");
+         return new SuccessDataResult<OrderDto>(cachedData, Messages.Order_Fetched);
       }
 
       public async Task<IResult> UpdateAsync(OrderDto orderDto)

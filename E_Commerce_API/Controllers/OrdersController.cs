@@ -1,11 +1,10 @@
 ﻿using E_Commerce_Business.Abstract;
 using E_Commerce_Entity.DTOs;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce_API.Controllers
 {
-   [Authorize]
+   //[Authorize]
    [Route("api/[controller]")]
    [ApiController]
    public class OrdersController : ControllerBase
@@ -53,17 +52,6 @@ namespace E_Commerce_API.Controllers
          return BadRequest();
       }
 
-      //[HttpGet("{orderId}")]
-      //public async Task<IActionResult> Get(int orderId)
-      //{
-      //   var result = await _OrderService.GetByIdAsync(orderId);
-      //   if (result.Success)
-      //   {
-      //      return Ok(result);
-      //   }
-      //   return BadRequest();
-      //}
-
       [HttpPost]
       public async Task<IActionResult> Add(OrderDto orderDto)
       {
@@ -74,6 +62,7 @@ namespace E_Commerce_API.Controllers
          }
          return BadRequest();
       }
+
       [HttpDelete("{orderId}")]
       public async Task<IActionResult> Delete(int orderId)
       {
@@ -84,6 +73,7 @@ namespace E_Commerce_API.Controllers
          }
          return BadRequest();
       }
+
       [HttpPut]
       public async Task<IActionResult> Update(OrderDto orderDto)
       {

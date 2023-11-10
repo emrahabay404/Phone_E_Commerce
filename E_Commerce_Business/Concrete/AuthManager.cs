@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using DataAccess.Abstract;
-using E_Commerce_Business.Abstract;
+﻿using E_Commerce_Business.Abstract;
 using E_Commerce_Business.Constants;
 using E_Commerce_Core.Entities.Concrete;
 using E_Commerce_Core.Utilities.Results;
@@ -12,15 +10,11 @@ namespace E_Commerce_Business.Concrete
 {
    public class AuthManager : IAuthService
    {
-      private IUserService _userService;
-      private ITokenHelper _tokenHelper;
-      IMapper _mapper;
-      IUserDal _UserDal;
+      private readonly IUserService _userService;
+      private readonly ITokenHelper _tokenHelper;
 
-      public AuthManager(IUserDal userDal,IUserService userService, ITokenHelper tokenHelper, IMapper mapper)
+      public AuthManager(IUserService userService, ITokenHelper tokenHelper)
       {
-         _UserDal = userDal;
-         _mapper = mapper;
          _userService = userService;
          _tokenHelper = tokenHelper;
       }

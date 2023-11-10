@@ -47,7 +47,7 @@
       public static string Product_Updated => "Product_Updated";
       public static string CategoryUpdated => "Category_Updated";
       public static string CategoriesListed => "Categories_Listed";
-      public static string CategoryFetched => "Category_Fetched";
+      public static string Category_Fetched => "Category_Fetched";
       public static string Category_Deleted => "Category_Deleted";
       public static string MaintenanceTime => "Maintenance_Time";
       public static string AuthorizationDenied => "Authorization_Denied";

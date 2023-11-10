@@ -15,9 +15,9 @@ namespace E_Commerce_API.Controllers
    [ApiController]
    public class AuthController : Controller
    {
-      IAuthService _authService;
-      IUserService _userService;
-      E_Commerce_DbContext _Context;
+      private readonly IAuthService _authService;
+      private readonly IUserService _userService;
+      private readonly E_Commerce_DbContext _Context;
       public AuthController(E_Commerce_DbContext context, IAuthService authService, IUserService userService)
       {
          _Context = context;
@@ -26,7 +26,7 @@ namespace E_Commerce_API.Controllers
       }
 
       [HttpPost("login")]
-      public async Task<ActionResult> Login(UserForLoginDto userForLoginDto)
+      public ActionResult Login(UserForLoginDto userForLoginDto)
       {
          var userToLogin = _authService.Login(userForLoginDto);
          if (!userToLogin.Success)
@@ -140,7 +140,7 @@ namespace E_Commerce_API.Controllers
 
       private static string CheckPasswordStrength(string _password)
       {
-         StringBuilder sb = new StringBuilder();
+         StringBuilder sb = new();
          if (_password.Length < 9)
             sb.Append("Minimum password length should be 8" + Environment.NewLine);
          if (!(Regex.IsMatch(_password, "[a-z]") && Regex.IsMatch(_password, "[A-Z]") && Regex.IsMatch(_password, "[0-9]")))
