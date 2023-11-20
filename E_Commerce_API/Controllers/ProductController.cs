@@ -11,21 +11,30 @@ namespace E_Commerce_API.Controllers
    public class ProductController : ControllerBase
    {
       IProductService _ProductService;
-
-      public ProductController(IProductService ProductService)
+      private readonly IUserService _userService;
+      private readonly ILogger<ProductController> _logger;
+      public ProductController(IProductService ProductService, IUserService userService, ILogger<ProductController> logger)
       {
+         _logger = logger;
          _ProductService = ProductService;
+         _userService = userService;
       }
 
       [HttpGet]
       public async Task<IActionResult> GetAll()
       {
          var result = await _ProductService.GetAllAsync();
+         var getUser = _userService.GetMyUsername();
          if (result.Success)
          {
+            _logger.LogInformation("User : " + getUser + " - " + "Process Message : " + result.Message);
             return Ok(result);
          }
-         return BadRequest(result);
+         else
+         {
+            _logger.LogInformation(result.Message);
+            return BadRequest(result);
+         }
       }
 
       [HttpPost]
