@@ -57,7 +57,6 @@ builder.Services.AddSwaggerGen(options =>
       Name = "Authorization",
       Type = SecuritySchemeType.ApiKey
    });
-
    options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
@@ -109,6 +108,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
           IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
        };
     });
+
 builder.Services.AddAuthorization(options =>
 {
    options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)

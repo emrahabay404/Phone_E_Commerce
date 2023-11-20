@@ -19,7 +19,7 @@ namespace E_Commerce_Business.Concrete
          _mapper = mapper;
          _categoryDal = categoryDal;
       }
-      //////////////ASYNC'S
+
       public async Task<IResult> AddAsync(CategoryDto category)
       {
          var Category = _mapper.Map<Category>(category);

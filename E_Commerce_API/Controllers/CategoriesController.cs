@@ -2,14 +2,10 @@
 using E_Commerce_Entity.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RabbitMQ.Client.Events;
-using RabbitMQ.Client;
-using System.Text;
-using Newtonsoft.Json;
 
 namespace E_Commerce_API.Controllers
 {
-   //[Authorize]
+   [Authorize]
    [Route("api/[controller]")]
    [ApiController]
    public class CategoriesController : ControllerBase

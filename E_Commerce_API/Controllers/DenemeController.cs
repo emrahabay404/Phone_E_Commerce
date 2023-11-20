@@ -1,14 +1,9 @@
 ﻿using DataAccess.Concrete.EntityFramework;
 using E_Commerce_Business.Abstract;
-using E_Commerce_Business.Constants;
-using E_Commerce_Core.Utilities.Results;
 using E_Commerce_Entity.Concrete;
 using E_Commerce_Entity.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Nest;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-using System.Text;
 
 namespace E_Commerce_API.Controllers
 {

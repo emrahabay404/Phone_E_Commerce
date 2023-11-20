@@ -22,9 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Caching\" />
-    <Folder Include="Extensions\" />
-    <Folder Include="Middlewares\" />
     <Folder Include="Utilities\Interceptors\" />
   </ItemGroup>
 

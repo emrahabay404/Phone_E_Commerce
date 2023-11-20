@@ -43,7 +43,7 @@ namespace E_Commerce_Business.Concrete
       {
          var _Product = await _productDal.GetAllAsync();
          var _ProductDto = _mapper.Map<IEnumerable<ProductDto>>(_Product);
-         var expirationTime = DateTimeOffset.Now.AddMinutes(2);
+         var expirationTime = DateTimeOffset.Now.AddMinutes(10);
          _CacheService.SetData("AllProducts", _ProductDto, expirationTime);
          var cachedData = _CacheService.GetData<IEnumerable<ProductDto>>("AllProducts");
          return new SuccessDataResult<IEnumerable<ProductDto>>(cachedData, Messages.Products_Listed);

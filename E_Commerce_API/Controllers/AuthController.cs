@@ -37,7 +37,6 @@ namespace E_Commerce_API.Controllers
          if (result.Success)
          {
             UpdateUserToken(result.Data.Token, result.Data.Expiration, userForLoginDto.Email);
-            //Response.Cookies.Append("token", result.Data.Token);
             return Ok(result);
          }
          return BadRequest(result.Message);
@@ -135,7 +134,6 @@ namespace E_Commerce_API.Controllers
          user.RefreshTokenExpiryTime = DateTime.Now;
          await _Context.SaveChangesAsync();
          return Unauthorized(Messages.AccessTokenInvalid);
-         //Response.Cookies.Delete("token");
       }
 
       private static string CheckPasswordStrength(string _password)
