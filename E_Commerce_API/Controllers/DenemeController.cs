@@ -18,10 +18,12 @@ namespace E_Commerce_API.Controllers
                  .PropertyName(p => p.CategoryId, "id")
      );
 
+      private readonly ILogger<DenemeController> _logger;
       private readonly ICategoryService _CategoryService;
       private readonly E_Commerce_DbContext _context;
       private static readonly ElasticClient elasticClient = new ElasticClient(connSettings);
-      public DenemeController(ICategoryService categoryService, E_Commerce_DbContext _DbContext)
+
+      public DenemeController(ICategoryService categoryService, E_Commerce_DbContext _DbContext, ILogger<DenemeController> logger)
       {
          _context = _DbContext;
          _CategoryService = categoryService;
@@ -38,24 +40,35 @@ namespace E_Commerce_API.Controllers
               .IndexMany(_context.Categories.ToList())
                );
          }
+         _logger = logger;
       }
+
+
+
+      //[HttpGet]
+      ////public async Task<IActionResult> GetAll()
+      //public List<Category> Get()
+      //{
+      //   var response = elasticClient.Search<Category>(i => i
+      //    .Query(q => q.MatchAll())
+      //    .PostFilter(f => f.Range(r => r.Field(fi => fi.CategoryId).GreaterThan(0)))
+      //     );
+      //   List<Category> items = new List<Category>();
+      //   foreach (var item in response.Documents)
+      //      items.Add(item);
+      //   return items;
+      //   //return Ok(new SuccessResult<IEnumerable<CategoryDto>>(items, Messages.CategoriesListed));
+      //}
 
 
 
       [HttpGet]
-      //public async Task<IActionResult> GetAll()
-      public List<Category> Get()
+      public IActionResult GetAll()
       {
-         var response = elasticClient.Search<Category>(i => i
-          .Query(q => q.MatchAll())
-          .PostFilter(f => f.Range(r => r.Field(fi => fi.CategoryId).GreaterThan(0)))
-           );
-         List<Category> items = new List<Category>();
-         foreach (var item in response.Documents)
-            items.Add(item);
-         return items;
-         //return Ok(new SuccessResult<IEnumerable<CategoryDto>>(items, Messages.CategoriesListed));
+         _logger.LogInformation("dENEME METODU CAGIRILDI");
+         return Ok(true);
       }
+
 
 
    }

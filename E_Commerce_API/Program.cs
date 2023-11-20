@@ -11,8 +11,15 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Filters;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+//Serilog için
+builder.Host.UseSerilog((context, configuration) =>
+configuration.ReadFrom.Configuration(context.Configuration));
+//Serilog için
 
 
 ////REDÝS ConnectionMultiplexer KULLANIMI ÝÇÝN
@@ -133,6 +140,11 @@ if (app.Environment.IsDevelopment())
    app.UseSwaggerUI();
 }
 
+
+
+//Serilog
+app.UseSerilogRequestLogging();
+//Serilog
 
 //app.UseRequestLocalization(new RequestLocalizationOptions
 //{

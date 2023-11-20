@@ -11,10 +11,12 @@ namespace E_Commerce_API.Controllers
    public class CategoriesController : ControllerBase
    {
       private readonly ICategoryService _categoryService;
-      // IConfiguration _config;
-      public CategoriesController(ICategoryService categoryService)
+      private readonly ILogger<CategoriesController> _logger;
+      // IConfiguration _config
+      public CategoriesController(ICategoryService categoryService, ILogger<CategoriesController> logger)
       {
          _categoryService = categoryService;
+         _logger = logger;
       }
 
       [HttpGet]
@@ -23,9 +25,14 @@ namespace E_Commerce_API.Controllers
          var result = await _categoryService.GetAllAsync();
          if (result.Success)
          {
+            _logger.LogInformation(result.Message);
             return Ok(result);
          }
-         return BadRequest(result);
+         else
+         {
+            _logger.LogInformation(result.Message);
+            return BadRequest(result);
+         }
       }
 
       [HttpPost]
