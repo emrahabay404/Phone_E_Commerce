@@ -1,17 +1,38 @@
 ﻿using E_Commerce_Core.Entities.Concrete;
+using E_Commerce_Core.Utilities.IoC;
 using E_Commerce_Entity.Concrete;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace DataAccess.Concrete.EntityFramework
 {
    public class E_Commerce_DbContext : DbContext
    {
       //public E_Commerce_DbContext(DbContextOptions<E_Commerce_DbContext> options) : base(options) { }
+     // IConfiguration _configuration;
 
+      //public E_Commerce_DbContext()
+      //{
+      //   var assemblyName = Assembly.GetEntryAssembly()?.GetName().Name;
+
+      //   switch (assemblyName)
+      //   {
+      //      case "E_Commerce_API":
+      //         _configuration = ServiceTool
+      //             .GetInstance<IConfiguration>();
+      //         break;
+      //      default:
+      //         _configuration = ServiceTool.ServiceProvider
+      //             .GetRequiredService<IConfiguration>();
+      //         break;
+      //   }
+      //}
 
       protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
       {
-         //optionsBuilder.UseSqlServer(@"Server=MYPC\SQLEXPRESS;Database=Phone_ECommerce;Trusted_Connection=true;TrustServerCertificate=True;");
+         //optionsBuilder.UseSqlServer(_configuration.GetConnectionString("Ms_Sql_Conn"));
          optionsBuilder.UseSqlServer(@"Server=MYPC\SQLEXPRESS;Database=E_Commerce_Db_New;Trusted_Connection=true;TrustServerCertificate=True;");
       }
 

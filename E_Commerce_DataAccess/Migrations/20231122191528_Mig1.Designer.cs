@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_Commerce_DataAccess.Migrations
 {
     [DbContext(typeof(E_Commerce_DbContext))]
-    [Migration("20231026133505_Mig1")]
+    [Migration("20231122191528_Mig1")]
     partial class Mig1
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace E_Commerce_DataAccess.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);

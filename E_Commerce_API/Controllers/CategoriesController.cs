@@ -44,9 +44,14 @@ namespace E_Commerce_API.Controllers
          var result = await _categoryService.AddAsync(categoryDto);
          if (result.Success)
          {
+            _logger.LogInformation("Process Message : " + result.Message);
             return Ok(result);
          }
-         return BadRequest();
+         else
+         {
+            _logger.LogInformation("Process Message : " + result.Message);
+            return BadRequest();
+         }
       }
 
       [HttpDelete("{CategoryId}")]

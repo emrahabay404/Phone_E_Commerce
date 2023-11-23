@@ -15,6 +15,9 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//appsetting ayar deneme
+//builder.Configuration.AddEnvironmentVariables("E_Commerce_API_");
+//appsetting ayar deneme
 
 //Serilog için
 builder.Host.UseSerilog((context, configuration) =>
