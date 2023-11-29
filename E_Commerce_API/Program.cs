@@ -7,17 +7,15 @@ using E_Commerce_Core.Utilities.Security.Encryption;
 using E_Commerce_Core.Utilities.Security.JWT;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Filters;
-using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//appsetting ayar deneme
-//builder.Configuration.AddEnvironmentVariables("E_Commerce_API_");
-//appsetting ayar deneme
 
 //Serilog için
 builder.Host.UseSerilog((context, configuration) =>
@@ -32,16 +30,27 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
 ////REDÝS ConnectionMultiplexer KULLANIMI ÝÇÝN
 
 
-//dapper için 
-//builder.Services.AddTransient<DapperDBContext>();
+
+
+
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllersWithViews();
+
+
+////appsetting ayar deneme
+////builder.Configuration.AddEnvironmentVariables("E_Commerce_API_");
+//var config = new ConfigurationBuilder()
+//            .AddJsonFile("appsettings.json")
+//            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+//            .Build();
+//var defaultConnectionString = config.GetConnectionString("Ms_Sql_Conn");
+//builder.Services.AddDbContext<E_Commerce_DbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString(defaultConnectionString)));
+////appsetting ayar deneme
+
 
 
 ////REDÝS KULLANIMI ÝÇÝN
@@ -71,14 +80,9 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
+//dapper için 
 //API de Standart DbContext i kullanabilmek için
 builder.Services.AddTransient<E_Commerce_DbContext>();
-
-
-//builder.Services.AddDbContext<E_Commerce_DbContext>(option =>
-//{
-//   option.UseSqlServer(builder.Configuration.GetConnectionString("SqlConn"));
-//});
 
 
 //HTTP CONTEXT ACCESOR ÝÇÝN
@@ -92,7 +96,7 @@ builder.Services.AddAutoMapper(typeof(GeneralMapping).Assembly);
 //AUTOFAC kullanýmý için 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutoFacBusiness()));
-//////
+//AUTOFAC kullanýmý için 
 
 builder.Services.AddCors(options => options.AddPolicy(name: "E_Commerce_Origins",
     policy =>
@@ -100,7 +104,11 @@ builder.Services.AddCors(options => options.AddPolicy(name: "E_Commerce_Origins"
        policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
     }));
 
-//builder.Services.AddLocalization();
+
+//Localization için 
+builder.Services.AddLocalization();
+//Localization için 
+
 
 ///JWT OLUÞTURMA ÝÇÝN
 var tokenOptions = builder.Configuration.GetRequiredSection("TokenOptions").Get<TokenOptions>();
@@ -118,7 +126,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
           IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
        };
     });
-
 builder.Services.AddAuthorization(options =>
 {
    options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
@@ -130,11 +137,6 @@ builder.Services.AddAuthorization(options =>
 var app = builder.Build();
 
 
-///CACHE ÝÇÝN
-//var cacheManager = app.Services.GetRequiredService<ICacheManager>();
-//cacheManager.Add("nbf", DateTimeOffset.Now.ToUnixTimeSeconds(), 600);
-///CACHE ÝÇÝN
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -144,30 +146,22 @@ if (app.Environment.IsDevelopment())
 }
 
 
-
 //Serilog
 app.UseSerilogRequestLogging();
 //Serilog
 
+//Dil için
 //app.UseRequestLocalization(new RequestLocalizationOptions
 //{
 //   DefaultRequestCulture = new RequestCulture(new CultureInfo("tr-TR"))
 //});
+//Dil için
 
+//Cors policy için
 app.UseCors("E_Commerce_Origins");
-
-//app.UseCors(options =>
-//options.WithOrigins("https://localhost:7175","*")
-//.AllowAnyMethod()
-//.AllowAnyOrigin()
-//.AllowAnyHeader());
-
-//builder.Services.AddCors();
-
-
-//app.ConfigureCustomExceptionMiddleware();
+//Cors policy için
+app.UseStaticFiles();
 app.UseAuthentication();
-//app.UseLogoutHandler();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

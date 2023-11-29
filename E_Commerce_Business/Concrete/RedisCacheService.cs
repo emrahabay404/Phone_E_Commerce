@@ -29,7 +29,7 @@ namespace E_Commerce_Business.Concrete
             server.FlushAllDatabases();
          }
       }
- 
+
       public T GetData<T>(string key)
       {
          var value = _cache.StringGet(key);
@@ -55,6 +55,15 @@ namespace E_Commerce_Business.Concrete
             return _cache.KeyDelete(key);
          }
          return false;
+      }
+
+      public bool KeyControl(string key)
+      {
+         bool _isKeyExist = _cache.KeyExists(key);
+         if (_isKeyExist == true)
+            return true;
+         else
+            return false;
       }
 
    }
