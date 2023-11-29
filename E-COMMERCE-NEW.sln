@@ -13,6 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "E_Commerce_Core", "E_Commer
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "E_Commerce_Business", "E_Commerce_Business\E_Commerce_Business.csproj", "{060E6C52-CFEB-415A-A88F-E8C5FF046DBE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8B67A52D-4CB5-4DBF-94E2-D532C79844E9}"
+	ProjectSection(SolutionItems) = preProject
+		Used_Technologies.txt = Used_Technologies.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

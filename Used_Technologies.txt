@@ -1,0 +1,15 @@
+# Phone_E_Commerce
+Sample technologies used in the project;
+
+-Asp.Net Core Mvc (7.0) (Layered Structure)
+-Web API (Rest & Soap)
+-Json Web Token (JWT) & Authorize
+-Autofac Module
+-Repository Design Pattern
+-AutoMapper & CQRS
+-Redis Cache
+-ElasticSearch & Docker
+-Ms Sql Server & Code First 
+-.Net Framework & LINQ
+-Dapper
+-Logging
