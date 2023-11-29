@@ -25,7 +25,6 @@ namespace E_Commerce_API.Controllers
          _userService = userService;
       }
 
-
       // DAPPER
       [HttpGet]
       public async Task<ActionResult<List<CategoryDto>>> GetAllDapper()
