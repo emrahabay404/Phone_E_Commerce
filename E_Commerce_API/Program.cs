@@ -30,10 +30,6 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
 ////REDÝS ConnectionMultiplexer KULLANIMI ÝÇÝN
 
 
-
-
-
-
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

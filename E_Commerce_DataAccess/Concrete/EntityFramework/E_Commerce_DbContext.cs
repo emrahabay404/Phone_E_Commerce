@@ -8,16 +8,17 @@ namespace DataAccess.Concrete.EntityFramework
    {
       //public E_Commerce_DbContext(DbContextOptions<E_Commerce_DbContext> options) : base(options) { }
 
-      public E_Commerce_DbContext()
-      {
+      //public E_Commerce_DbContext()
+      //{
 
-      }
+      //}
 
       protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
       {
          //optionsBuilder.UseSqlServer(_configuration.GetConnectionString("Ms_Sql_Conn"));
-         optionsBuilder.UseSqlServer(@"Server=MYPC\SQLEXPRESS;Database=E_Commerce_Db_New;Trusted_Connection=true;TrustServerCertificate=True;");
+         optionsBuilder.UseSqlServer(@"Server=MYPC\SQLEXPRESS;Database=E_Commerce_Db_New;Trusted_Connection=True;TrustServerCertificate=True;");
       }
+      
 
       public DbSet<Brand> Brands { get; set; }
       public DbSet<Order> Orders { get; set; }

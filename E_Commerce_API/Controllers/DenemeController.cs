@@ -2,11 +2,13 @@
 using E_Commerce_Business.Abstract;
 using E_Commerce_Entity.Concrete;
 using E_Commerce_Entity.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nest;
 
 namespace E_Commerce_API.Controllers
 {
+   //[Authorize] 
    [Route("api/[controller]")]
    [ApiController]
    public class DenemeController : ControllerBase
