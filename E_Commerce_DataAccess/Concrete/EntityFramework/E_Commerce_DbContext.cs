@@ -1,24 +1,25 @@
 ﻿using E_Commerce_Core.Entities.Concrete;
+using E_Commerce_Core.Utilities.IoC;
+using E_Commerce_DataAccess;
 using E_Commerce_Entity.Concrete;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
+using System.Text;
 
 namespace DataAccess.Concrete.EntityFramework
 {
    public class E_Commerce_DbContext : DbContext
    {
-      //public E_Commerce_DbContext(DbContextOptions<E_Commerce_DbContext> options) : base(options) { }
 
-      //public E_Commerce_DbContext()
-      //{
-
-      //}
 
       protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
       {
          //optionsBuilder.UseSqlServer(_configuration.GetConnectionString("Ms_Sql_Conn"));
          optionsBuilder.UseSqlServer(@"Server=MYPC\SQLEXPRESS;Database=E_Commerce_Db_New;Trusted_Connection=True;TrustServerCertificate=True;");
       }
-      
+
 
       public DbSet<Brand> Brands { get; set; }
       public DbSet<Order> Orders { get; set; }

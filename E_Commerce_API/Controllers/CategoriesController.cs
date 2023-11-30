@@ -1,5 +1,7 @@
 ﻿using Dapper;
 using E_Commerce_Business.Abstract;
+using E_Commerce_Business.Constants;
+using E_Commerce_Core.Utilities.Results;
 using E_Commerce_Entity.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +9,7 @@ using Microsoft.Data.SqlClient;
 
 namespace E_Commerce_API.Controllers
 {
-   [Authorize]
+   //[Authorize]
    [Route("api/[controller]")]
    [ApiController]
    public class CategoriesController : ControllerBase
@@ -16,9 +18,11 @@ namespace E_Commerce_API.Controllers
       private readonly IUserService _userService;
       private readonly ILogger<CategoriesController> _logger;
       private readonly IConfiguration _config;
+      private readonly ICacheService _cacheService;
 
-      public CategoriesController(IConfiguration configuration, ICategoryService categoryService, ILogger<CategoriesController> logger, IUserService userService)
+      public CategoriesController(ICacheService cacheService, IConfiguration configuration, ICategoryService categoryService, ILogger<CategoriesController> logger, IUserService userService)
       {
+         _cacheService = cacheService;
          _config = configuration;
          _categoryService = categoryService;
          _logger = logger;
@@ -27,20 +31,24 @@ namespace E_Commerce_API.Controllers
 
       // DAPPER
       [HttpGet]
-      public async Task<ActionResult<List<CategoryDto>>> GetAllDapper()
+      //public async Task<ActionResult<IEnumerable<CategoryDto>>> GetAllDapper()
+      public async Task<IActionResult> GetAll()
       {
          using var connection = new SqlConnection(_config.GetConnectionString("DapperConn"));
          IEnumerable<CategoryDto> _categories = await SelectAllCategories(connection);
-         return Ok(_categories);
+         var expirationTime = DateTimeOffset.Now.AddMinutes(10);
+         _cacheService.SetData("AllCategories", _categories, expirationTime);
+         var cachedData = _cacheService.GetData<IEnumerable<CategoryDto>>("AllCategories");
+         return Ok(new SuccessDataResult<IEnumerable<CategoryDto>>(cachedData, Messages.CategoriesListed));
       }
 
       [HttpPost]
       public async Task<ActionResult<List<CategoryDto>>> CreateCategoryDapper(CategoryDto categoryDto)
       {
          using var connection = new SqlConnection(_config.GetConnectionString("DapperConn"));
-         //await connection.ExecuteAsync("insert into dbo.Categories categoryName values (@categoryName)", categoryDto);
          await connection.ExecuteAsync("insert  dbo.Categories(CategoryName) values( '" + categoryDto.CategoryName + "')");
-         return Ok(await SelectAllCategories(connection));
+         //return Ok(await SelectAllCategories(connection));
+         return Ok(new SuccessResult(Messages.CategoryAdded));
       }
 
       [HttpDelete("{categoryId}")]
@@ -48,7 +56,7 @@ namespace E_Commerce_API.Controllers
       {
          using var connection = new SqlConnection(_config.GetConnectionString("DapperConn"));
          await connection.ExecuteAsync("delete from dbo.Categories where categoryId = @categoryId", new { categoryId = categoryId });
-         return Ok(await SelectAllCategories(connection));
+         return Ok(new SuccessResult(Messages.Category_Deleted));
       }
 
       [HttpGet("{categoryId}")]
@@ -57,7 +65,8 @@ namespace E_Commerce_API.Controllers
          using var connection = new SqlConnection(_config.GetConnectionString("DapperConn"));
          var _Category = await connection.QueryFirstAsync<CategoryDto>("select * from dbo.Categories where CategoryId = @CategoryId",
                  new { CategoryId = categoryId });
-         return Ok(_Category);
+         //return Ok(_Category);
+         return Ok(new SuccessDataResult<CategoryDto>(_Category, Messages.Category_Fetched));
       }
 
       [HttpPut]
@@ -65,7 +74,7 @@ namespace E_Commerce_API.Controllers
       {
          using var connection = new SqlConnection(_config.GetConnectionString("DapperConn"));
          await connection.ExecuteAsync("update dbo.Categories set CategoryName = @CategoryName where CategoryId = @CategoryId", categoryDto);
-         return Ok(await SelectAllCategories(connection));
+         return Ok(new SuccessResult(Messages.CategoryUpdated));
       }
 
       private static async Task<IEnumerable<CategoryDto>> SelectAllCategories(SqlConnection connection)
@@ -77,10 +86,15 @@ namespace E_Commerce_API.Controllers
 
 
 
+
+
+
+
+
       //[HttpGet]
       //public async Task<IActionResult> GetAll()
       //{
-      //   var result = await _categoryService.GetAllAsync();
+      //    var result = await _categoryService.GetAllAsync();
       //   var getUser = _userService.GetMyUsername();
       //   if (result.Success)
       //   {
@@ -142,7 +156,6 @@ namespace E_Commerce_API.Controllers
       //   }
       //   return BadRequest();
       //}
-
 
 
    }

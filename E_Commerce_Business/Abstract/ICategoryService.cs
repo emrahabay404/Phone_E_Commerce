@@ -20,8 +20,6 @@ namespace E_Commerce_Business.Abstract
       Task<IDataResult<CategoryDto>> GetByIdAsync(int CategoryId);
       Task<IDataResult<IEnumerable<CategoryDto>>> GetAllAsync();
 
-
    }
-
 }
 

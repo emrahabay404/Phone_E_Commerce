@@ -7,6 +7,6 @@ namespace E_Commerce_DataAccess.Concrete.EntityFramework
 {
    public class EfCustomerDal : EfEntityRepositoryBase<Customer, E_Commerce_DbContext>, ICustomerDal
    {
-
+         
    }
 }

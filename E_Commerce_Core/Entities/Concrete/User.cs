@@ -1,6 +1,5 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
-
 namespace E_Commerce_Core.Entities.Concrete
 {
    public class User : IEntity
@@ -19,6 +18,5 @@ namespace E_Commerce_Core.Entities.Concrete
       public byte[] PasswordSalt { get; set; }
       public byte[] PasswordHash { get; set; }
       public bool Status { get; set; }
-
    }
 }

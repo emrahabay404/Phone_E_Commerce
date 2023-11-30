@@ -10,6 +10,6 @@ Sample technologies used in the project;
 -Redis Cache
 -ElasticSearch & Docker
 -Ms Sql Server & Code First 
--.Net Framework & LINQ
+-Net Framework & LINQ
 -Dapper
 -Logging

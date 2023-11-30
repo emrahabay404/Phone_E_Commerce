@@ -37,18 +37,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllersWithViews();
 
 
-////appsetting ayar deneme
-////builder.Configuration.AddEnvironmentVariables("E_Commerce_API_");
-//var config = new ConfigurationBuilder()
-//            .AddJsonFile("appsettings.json")
-//            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
-//            .Build();
-//var defaultConnectionString = config.GetConnectionString("Ms_Sql_Conn");
-//builder.Services.AddDbContext<E_Commerce_DbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString(defaultConnectionString)));
-////appsetting ayar deneme
-
-
-
 ////REDÝS KULLANIMI ÝÇÝN
 //builder.Services.AddDistributedRedisCache(options =>
 //{
@@ -78,7 +66,8 @@ builder.Services.AddSwaggerGen(options =>
 
 //dapper için 
 //API de Standart DbContext i kullanabilmek için
-builder.Services.AddTransient<E_Commerce_DbContext>();
+//builder.Services.AddTransient<E_Commerce_DbContext>();
+builder.Services.AddSingleton<E_Commerce_DbContext>();
 
 
 //HTTP CONTEXT ACCESOR ÝÇÝN

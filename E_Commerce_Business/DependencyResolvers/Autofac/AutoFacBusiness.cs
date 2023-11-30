@@ -3,9 +3,12 @@ using Autofac;
 using DataAccess.Abstract;
 using E_Commerce_Business.Abstract;
 using E_Commerce_Business.Concrete;
+using E_Commerce_Core.Utilities.IoC;
 using E_Commerce_Core.Utilities.Security.JWT;
 using E_Commerce_DataAccess.Abstract;
 using E_Commerce_DataAccess.Concrete.EntityFramework;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace E_Commerce_Business.DependencyResolvers.Autofac
 {
@@ -16,9 +19,6 @@ namespace E_Commerce_Business.DependencyResolvers.Autofac
       {
 
          builder.RegisterType<RedisCacheService>().As<ICacheService>();
-         //builder.Register(componentContext => new MemoryDistributedCache(
-         //    Options.Create(new MemoryDistributedCacheOptions())
-         //)).As<IDistributedCache>().SingleInstance();
 
 
          builder.RegisterType<UserManager>().As<IUserService>();
