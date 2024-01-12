@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace E_Commerce_DataAccess.Migrations
+namespace MicroServices.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class yeni656 : Migration
+    public partial class Mig2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -1,0 +1,53 @@
+{
+   "GlobalConfiguration": {
+      "BaseUrl": "https://localhost:7149"
+   },
+   "Routes": [
+      {
+         "UpstreamPathTemplate": "/api/Authentication/login",
+         "UpstreamHttpMethod": [ "Get", "Post" ],
+         "DownstreamPathTemplate": "/api/Authentication/login",
+         "DownstreamScheme": "https",
+         "DownstreamHostAndPorts": [
+            {
+               "Host": "localhost",
+               "Port": 7144
+            }
+         ]
+      },
+      {
+         "UpstreamPathTemplate": "/api/shoes/",
+         "UpstreamHttpMethod": [ "Get" ],
+         "DownstreamPathTemplate": "/api/shoes/",
+         "DownstreamScheme": "https",
+         "DownstreamHostAndPorts": [
+            {
+               "Host": "localhost",
+               "Port": 7065
+            }
+         ],
+         "AuthenticationOptions": {
+            "AuthenticationProviderKey": "Bearer",
+            "AllowedScopes": [ "shoe.read" ]
+         }
+      },
+      {
+         "UpstreamPathTemplate": "/api/shoes/{id}",
+         "UpstreamHttpMethod": [ "Delete" ],
+         "DownstreamPathTemplate": "/api/shoes/{id}",
+         "DownstreamScheme": "https",
+         "DownstreamHostAndPorts": [
+            {
+               "Host": "localhost",
+               "Port": 7065
+            }
+         ],
+         "AuthenticationOptions": {
+            "AuthenticationProviderKey": "Bearer"
+         },
+         "RouteClaimsRequirement": {
+            "Role": "Admin"
+         }
+      }
+   ]
+}

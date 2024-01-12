@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_Commerce_DataAccess.Migrations
 {
     [DbContext(typeof(E_Commerce_DbContext))]
-    [Migration("20231130134511_Mig1")]
-    partial class Mig1
+    [Migration("20231130195820_Mig2")]
+    partial class Mig2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

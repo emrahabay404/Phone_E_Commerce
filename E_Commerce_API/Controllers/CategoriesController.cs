@@ -9,7 +9,7 @@ using Microsoft.Data.SqlClient;
 
 namespace E_Commerce_API.Controllers
 {
-   //[Authorize]
+   [Authorize(Roles = "User")]
    [Route("api/[controller]")]
    [ApiController]
    public class CategoriesController : ControllerBase
