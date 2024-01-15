@@ -24,11 +24,11 @@ namespace JwtTokenAuthentication
             options.TokenValidationParameters = new TokenValidationParameters
             {
                ValidateIssuer = true,
-               ValidateAudience = false,
-               //ValidAudience = "https://localhost:7144",
+               ValidateAudience = true,
+               ValidAudience = "https://localhost:7144",
                ValidIssuer = "https://localhost:7144",
                ValidateIssuerSigningKey = true,
-               //ClockSkew = TimeSpan.Zero,
+               ClockSkew = TimeSpan.Zero,
                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecurityKey))
             };
          });
