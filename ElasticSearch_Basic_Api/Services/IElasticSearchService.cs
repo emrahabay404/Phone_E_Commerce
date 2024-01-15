@@ -1,4 +1,4 @@
-﻿namespace E_S_Crud.Api.Services
+﻿namespace ElasticSearch_Basic_Api.Services
 {
    public interface IElasticSearchService<T>
    {

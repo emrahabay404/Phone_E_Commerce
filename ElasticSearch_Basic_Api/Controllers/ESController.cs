@@ -1,14 +1,13 @@
-﻿using E_S_Crud.Api.Models;
-using E_S_Crud.Api.Services;
+﻿using ElasticSearch_Basic_Api.Models;
+using ElasticSearch_Basic_Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace E_S_Crud.Api.Controllers
+namespace ElasticSearch_Basic_Api.Controllers
 {
    [Route("api/[controller]")]
    [ApiController]
    public class ESController : ControllerBase
    {
-
       private readonly Services.IElasticSearchService<Product> _elasticSearchService;
 
       public ESController(IElasticSearchService<Product> elasticSearchService)
@@ -56,7 +55,6 @@ namespace E_S_Crud.Api.Controllers
          var result = await _elasticSearchService.DeleteDocumentAsync(id);
          return Ok(result);
       }
-
 
    }
 }

@@ -1,5 +1,5 @@
-using E_S_Crud.Api.Models;
-using E_S_Crud.Api.Services;
+using ElasticSearch_Basic_Api.Models;
+using ElasticSearch_Basic_Api.Services;
 using Nest;
 
 var builder = WebApplication.CreateBuilder(args);

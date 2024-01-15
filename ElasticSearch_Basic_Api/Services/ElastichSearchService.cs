@@ -1,10 +1,9 @@
 ﻿using Nest;
 
-namespace E_S_Crud.Api.Services
+namespace ElasticSearch_Basic_Api.Services
 {
    public class ElastichSearchService<T> : IElasticSearchService<T> where T : class
    {
-
       private readonly ElasticClient _elasticClient;
 
       public ElastichSearchService(ElasticClient elasticClient)

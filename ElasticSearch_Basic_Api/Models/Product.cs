@@ -1,4 +1,4 @@
-﻿namespace E_S_Crud.Api.Models
+﻿namespace ElasticSearch_Basic_Api.Models
 {
    public class Product
    {
