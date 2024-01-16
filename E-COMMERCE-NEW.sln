@@ -44,11 +44,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MongoDb", "MongoDb", "{4EC9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dapper", "Dapper", "{8DB2CD96-54CE-42CC-A955-5C9606BBAEA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dapper_Basic_Api", "Dapper_Basic_Api\Dapper_Basic_Api.csproj", "{BA151819-5473-42F0-8048-DCECB96C3080}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dapper_Basic_Api", "Dapper_Basic_Api\Dapper_Basic_Api.csproj", "{BA151819-5473-42F0-8048-DCECB96C3080}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElasticSearch_Basic_Api", "ElasticSearch_Basic_Api\ElasticSearch_Basic_Api.csproj", "{047B50BE-A836-4FF6-9208-99F58A0DA688}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticSearch_Basic_Api", "ElasticSearch_Basic_Api\ElasticSearch_Basic_Api.csproj", "{047B50BE-A836-4FF6-9208-99F58A0DA688}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDb_Basic_Api", "MongoDb_Basic_Api\MongoDb_Basic_Api.csproj", "{918AD050-D3C6-4842-ADE2-8B0555ED32AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoDb_Basic_Api", "MongoDb_Basic_Api\MongoDb_Basic_Api.csproj", "{918AD050-D3C6-4842-ADE2-8B0555ED32AC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PostgreSql", "PostgreSql", "{1CE632BA-6A95-468F-A46B-D3E2ADD6CE73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostgreSql_Basic_Api", "PostgreSql_Basic_Api\PostgreSql_Basic_Api.csproj", "{F65EB1C3-3FEC-4AA1-9597-38B8099A4B17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -116,6 +120,10 @@ Global
 		{918AD050-D3C6-4842-ADE2-8B0555ED32AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{918AD050-D3C6-4842-ADE2-8B0555ED32AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{918AD050-D3C6-4842-ADE2-8B0555ED32AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F65EB1C3-3FEC-4AA1-9597-38B8099A4B17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F65EB1C3-3FEC-4AA1-9597-38B8099A4B17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F65EB1C3-3FEC-4AA1-9597-38B8099A4B17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F65EB1C3-3FEC-4AA1-9597-38B8099A4B17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -136,6 +144,8 @@ Global
 		{BA151819-5473-42F0-8048-DCECB96C3080} = {8DB2CD96-54CE-42CC-A955-5C9606BBAEA0}
 		{047B50BE-A836-4FF6-9208-99F58A0DA688} = {1422D9E3-CCB2-4B1A-8FA9-8F6F9D3D086E}
 		{918AD050-D3C6-4842-ADE2-8B0555ED32AC} = {4EC91CA1-0B24-4E61-8E50-B47A908BB503}
+		{1CE632BA-6A95-468F-A46B-D3E2ADD6CE73} = {818E05C7-77E3-4204-B8F5-5625632485B7}
+		{F65EB1C3-3FEC-4AA1-9597-38B8099A4B17} = {1CE632BA-6A95-468F-A46B-D3E2ADD6CE73}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3FD1BF0E-4843-492B-86DF-E06C89C020A5}
