@@ -13,7 +13,7 @@ namespace PostgreSql_Basic_Api.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Articles",
+                name: "Movies",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -24,7 +24,7 @@ namespace PostgreSql_Basic_Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Articles", x => x.Id);
+                    table.PrimaryKey("PK_Movies", x => x.Id);
                 });
         }
 
@@ -32,7 +32,7 @@ namespace PostgreSql_Basic_Api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Articles");
+                name: "Movies");
         }
     }
 }

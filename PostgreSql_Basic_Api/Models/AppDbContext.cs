@@ -8,7 +8,7 @@ namespace PostgreSql_Basic_Api.Models
       {
       }
 
-      public DbSet<CSharpCornerArticle> Articles { get; set; }
+      public DbSet<Movie> Movies { get; set; }
 
    }
 }

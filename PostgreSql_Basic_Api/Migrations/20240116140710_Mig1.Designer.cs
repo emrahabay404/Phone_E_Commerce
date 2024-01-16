@@ -12,7 +12,7 @@ using PostgreSql_Basic_Api.Models;
 namespace PostgreSql_Basic_Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240116132054_Mig1")]
+    [Migration("20240116140710_Mig1")]
     partial class Mig1
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace PostgreSql_Basic_Api.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("PostgreSql_Basic_Api.Models.CSharpCornerArticle", b =>
+            modelBuilder.Entity("PostgreSql_Basic_Api.Models.Movie", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -46,7 +46,7 @@ namespace PostgreSql_Basic_Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Articles");
+                    b.ToTable("Movies");
                 });
 #pragma warning restore 612, 618
         }

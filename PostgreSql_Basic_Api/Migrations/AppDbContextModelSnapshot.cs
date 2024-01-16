@@ -22,7 +22,7 @@ namespace PostgreSql_Basic_Api.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("PostgreSql_Basic_Api.Models.CSharpCornerArticle", b =>
+            modelBuilder.Entity("PostgreSql_Basic_Api.Models.Movie", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -43,7 +43,7 @@ namespace PostgreSql_Basic_Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Articles");
+                    b.ToTable("Movies");
                 });
 #pragma warning restore 612, 618
         }
