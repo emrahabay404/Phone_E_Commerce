@@ -8,16 +8,6 @@ namespace Auth.Api.Controllers
    [ApiController]
    public class AuthenticationController : ControllerBase
    {
-
-
-
-
-
-
-
-
-
-
       private readonly IAuthService _authService;
       private readonly ILogger<AuthenticationController> _logger;
 
@@ -69,8 +59,6 @@ namespace Auth.Api.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
          }
       }
-
-
 
    }
 }

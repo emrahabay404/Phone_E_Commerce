@@ -20,6 +20,7 @@ namespace Auth.Api.Services
          _configuration = configuration;
 
       }
+
       public async Task<(int, string)> Registeration(RegistrationModel model, string role)
       {
          var userExists = await userManager.FindByNameAsync(model.Username);
