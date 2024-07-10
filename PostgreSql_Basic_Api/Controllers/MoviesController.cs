@@ -15,6 +15,8 @@ namespace PostgreSql_Basic_Api.Controllers
          _context = context;
       }
 
+
+
       [HttpGet]
       public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
       {
