@@ -7,147 +7,126 @@ using E_Commerce_Core.Utilities.Security.Encryption;
 using E_Commerce_Core.Utilities.Security.JWT;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Filters;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-//Serilog için
+// Serilog konfigürasyonu
 builder.Host.UseSerilog((context, configuration) =>
-configuration.ReadFrom.Configuration(context.Configuration));
-//Serilog için
+    configuration.ReadFrom.Configuration(context.Configuration));
 
+// Autofac entegrasyonu
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
+    containerBuilder.RegisterModule(new AutoFacBusiness()));
 
-////REDÝS ConnectionMultiplexer KULLANIMI ÝÇÝN
-IConfiguration configuration = builder.Configuration;
-var multiplexer = ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis"));
-builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
-////REDÝS ConnectionMultiplexer KULLANIMI ÝÇÝN
+// Redis baðlantýsý (aktif deðil, kullanýlacaksa açýlabilir)
+// var multiplexer = ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis"));
+// builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
 
-
-// Add services to the container.
+// Servisler için ayarlar
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddControllersWithViews();
+builder.Services.AddEndpointsApiExplorer();
 
-
-////REDÝS KULLANIMI ÝÇÝN
-//builder.Services.AddDistributedRedisCache(options =>
-//{
-//   options.Configuration = "127.0.0.1:6379";
-//});
-//builder.Services.AddSingleton<IConnectionMultiplexer>(x => ConnectionMultiplexer.Connect(
-//   new ConfigurationOptions
-//   {
-//      EndPoints = { $"{builder.Configuration.GetValue<string>("Redis:Host")}:{builder.Configuration.GetValue<int>("Redis:Port")}" }
-//   }));
-//builder.Services.AddScoped<IRedisService, RedisService>();
-////REDÝS KULLANIMI ÝÇÝN
-
-
+// Swagger konfigürasyonu
 builder.Services.AddSwaggerGen(options =>
 {
-   options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-   {
-      Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
-      In = ParameterLocation.Header,
-      Name = "Authorization",
-      Type = SecuritySchemeType.ApiKey
-   });
-   options.OperationFilter<SecurityRequirementsOperationFilter>();
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        Description = "Authorization header using the Bearer scheme (\"{token}\")",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
-
-//dapper için 
-//API de Standart DbContext i kullanabilmek için
-//builder.Services.AddTransient<E_Commerce_DbContext>();
+// Dapper ve DbContext kullanýmý
 builder.Services.AddSingleton<E_Commerce_DbContext>();
 
-
-//HTTP CONTEXT ACCESOR ÝÇÝN
+// HttpContextAccessor
 builder.Services.AddHttpContextAccessor();
-//HTTP CONTEXT ACCESOR ÝÇÝN
 
-//automapper için
+// AutoMapper konfigürasyonu
 builder.Services.AddAutoMapper(typeof(GeneralMapping).Assembly);
-//automapper için
 
-//AUTOFAC kullanýmý için 
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutoFacBusiness()));
-//AUTOFAC kullanýmý için 
-
+// CORS ayarlarý
 builder.Services.AddCors(options => options.AddPolicy(name: "E_Commerce_Origins",
     policy =>
     {
-       policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+        policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
     }));
 
-
-//Localization için 
+// Localization ayarlarý
 builder.Services.AddLocalization();
-//Localization için 
 
-
-///JWT OLUÞTURMA ÝÇÝN
+// JWT Token oluþturma ayarlarý
 var tokenOptions = builder.Configuration.GetRequiredSection("TokenOptions").Get<TokenOptions>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-       options.TokenValidationParameters = new TokenValidationParameters
-       {
-          ValidateIssuer = true,
-          ValidateAudience = true,
-          ValidateLifetime = true,
-          ValidIssuer = tokenOptions.Issuer,
-          ValidAudience = tokenOptions.Audience,
-          ValidateIssuerSigningKey = true,
-          IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
-       };
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidIssuer = tokenOptions.Issuer,
+            ValidAudience = tokenOptions.Audience,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
+        };
     });
+
+// Tüm uygulama için yetkilendirme (Authorize) zorunlu olacak þekilde ayarlama
 builder.Services.AddAuthorization(options =>
 {
-   options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
-       .RequireAuthenticatedUser()
-       .Build();
+    options.FallbackPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+        .RequireAuthenticatedUser()
+        .Build();
 });
-///JWT OLUÞTURMA ÝÇÝN
 
 var app = builder.Build();
 
-
-
-// Configure the HTTP request pipeline.
+// Geliþtirme ortamý için Swagger ve UI
 if (app.Environment.IsDevelopment())
 {
-   app.UseSwagger();
-   app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-
-//Serilog
+// Serilog ile istek loglama
 app.UseSerilogRequestLogging();
-//Serilog
 
-//Dil için
-//app.UseRequestLocalization(new RequestLocalizationOptions
-//{
-//   DefaultRequestCulture = new RequestCulture(new CultureInfo("tr-TR"))
-//});
-//Dil için
-
-//Cors policy için
-app.UseCors("E_Commerce_Origins");
-//Cors policy için
-app.UseStaticFiles();
-app.UseAuthentication();
+// HTTPS yönlendirmesi
 app.UseHttpsRedirection();
+
+// Localization için dil ayarlarý
+var supportedCultures = new[] { new CultureInfo("tr-TR"), new CultureInfo("en-US") };
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("tr-TR"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+});
+
+// CORS politikasýný etkinleþtirme
+app.UseCors("E_Commerce_Origins");
+
+// Statik dosya ayarlarý
+app.UseStaticFiles();
+
+// Authentication ve Authorization middleware'leri
+app.UseAuthentication();
 app.UseAuthorization();
+
+// Controller rotalarý
 app.MapControllers();
+
+// Uygulamayý çalýþtýr
 app.Run();
